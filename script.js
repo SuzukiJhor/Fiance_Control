@@ -1,5 +1,4 @@
 const transUl = document.querySelector('#transactions')
-console.log(transUl)
 
 const transFicticias = [
     { id: 1, nome: 'Bolo de brigadeiro', valor: -20 },
@@ -15,10 +14,20 @@ const addTransDentroDOM = (trans) => {
 
     li.classList.add(CSSclass);
     li.innerHTML = `
-        ${trans.nome} <span>R$ ${trans.valor}</span><button class="delete-btn"></button>
+        ${trans.nome} <span>R$  ${trans.valor}</span><button class="delete-btn"></button>
     `
-
-    console.log(li)
+    transUl.append(li)
 }
 
-addTransDentroDOM(transFicticias[2]);
+const atualizarBalanca = () => {
+    const transValores = transFicticias.map(trans => trans.valor)
+    const total = transValores.reduce((acumulador, trans) => acumulador + trans, 0).toFixed(2)
+    console.log(total)
+}
+
+const init = () => {
+    transFicticias.forEach(addTransDentroDOM)
+    atualizarBalanca();
+}
+
+init();
