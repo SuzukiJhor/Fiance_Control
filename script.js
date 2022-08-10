@@ -2,6 +2,9 @@ const transUl = document.querySelector('#transactions')
 const exibirReceitas = document.querySelector('#money-plus')
 const exibirDespesas = document.querySelector('#money-minus')
 const exibirBalanca = document.querySelector('#balance')
+const formulario = document.querySelector('#form')
+const transNomeInput = document.querySelector('#text')
+const transValorInput = documet.querySelector('#amount')
 
 
 //Array com as despesas e receitas 
