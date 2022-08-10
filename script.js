@@ -1,4 +1,8 @@
 const transUl = document.querySelector('#transactions')
+const exibirReceitas = document.querySelector('#money-plus')
+const exibirDespesas = document.querySelector('#money-minus')
+const exibirBalança = document.querySelector('#balance')
+
 
 const transFicticias = [
     { id: 1, nome: 'Bolo de brigadeiro', valor: -20 },
@@ -20,9 +24,25 @@ const addTransDentroDOM = (trans) => {
 }
 
 const atualizarBalanca = () => {
-    const transValores = transFicticias.map(trans => trans.valor)
-    const total = transValores.reduce((acumulador, trans) => acumulador + trans, 0).toFixed(2)
-    console.log(total)
+    const transValores = transFicticias
+        .map(trans => trans.valor);
+
+    const total = transValores
+        .reduce((acumulador, valor) => acumulador + valor, 0)
+        .toFixed(2);
+
+    const receitas = transValores
+        .filter(valor => valor > 0)
+        .reduce((acumulador, valor) => acumulador + valor, 0)
+        .toFixed(2);
+
+    const despesas = transValores
+        .filter(valor => valor < 0)
+        .reduce((acumulador, valor) => acumulador + valor, 0)
+        .toFixed(2);
+
+
+    console.log(despesas)
 }
 
 const init = () => {
