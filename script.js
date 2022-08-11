@@ -9,12 +9,19 @@ const transValorInput = document.querySelector('#amount')
 
 
 //Array com as despesas e receitas 
-const transFicticias = [
+let transFicticias = [
     { id: 1, nome: 'Bolo de brigadeiro', valor: -20 },
     { id: 2, nome: 'Salário', valor: 300 },
     { id: 3, nome: 'Torta de frango', valor: -10 },
     { id: 4, nome: 'Violão', valor: 150 }
 ]
+
+
+//Função para remover as transações pelo ID
+const removerTrans = (ID) => {
+    transFicticias = transFicticias.filter(trans => trans.id !== ID)
+    init()
+}
 
 //adicionando uma li dentro do documento com as referencias
 const addTransDentroDOM = (trans) => {
@@ -24,7 +31,13 @@ const addTransDentroDOM = (trans) => {
 
     li.classList.add(CSSclass);
     li.innerHTML = `
-        ${trans.nome} <span>R$  ${trans.valor}</span><button class="delete-btn"></button>
+        ${trans.nome} 
+        <span>
+        R$  ${trans.valor}
+        </span>
+        <button class="delete-btn"  onClick='removerTrans(${trans.id})'>
+        x
+        </button>
     `
     transUl.append(li)
 }
