@@ -18,17 +18,19 @@ const transValorInput = document.querySelector('#amount')
 
 
 //manipulando o localStorage
-const transLocalStorage = JSON.parse(localStorage.getItem('trans'))
+const transLocalStorage = JSON.parse(localStorage.getItem('transaction'))
 
-let trans = localStorage.getItem('trans') !== null ? transLocalStorage : []
-console.log(trans)
+let trans = localStorage.getItem('transaction') !== null ? transLocalStorage : []
+
 
 
 //Função para remover as transações pelo ID
 const removerTrans = (ID) => {
-    trans = trans.filter(trans => trans.id !== ID)
-    atualizarLocalStorage()
 
+    trans = trans.filter(trans => trans.id !== ID)
+    console.log(trans)
+
+    atualizarLocalStorage()
     init()
 }
 
@@ -44,11 +46,12 @@ const addTransDentroDOM = (trans) => {
         <span>
         R$  ${trans.valor}
         </span>
-        <button class="delete-btn"  onClick='removerTrans(${trans.id})'>
+        <button class="delete-btn"  onclick='removerTrans(${trans.id})'>
         x
         </button>
     `
     transUl.append(li)
+    console.log(trans.id)
 }
 
 
@@ -82,6 +85,7 @@ const atualizarBalanca = () => {
 //função para iniciar o projeto, passando o for para cada elemento.
 const init = () => {
     transUl.innerHTML = ''
+    console.log(trans.id)
     trans.forEach(addTransDentroDOM)
     atualizarBalanca();
 }
@@ -89,10 +93,11 @@ const init = () => {
 init();
 
 const atualizarLocalStorage = () => {
-    localStorage.setItem('trans', JSON.stringify(trans))
+    localStorage.setItem('transaction', JSON.stringify(trans))
 }
 
-const ID = Math.round(Math.random() * 100)
+const gerarID = () => Math.round(Math.random() * 100)
+
 
 
 //Checando se os campos do formulário foram preenchidos
@@ -108,7 +113,7 @@ formulario.addEventListener('submit', event => {
     }
 
     const transacao = {
-        id: ID,
+        id: gerarID(),
         nome: nomeTrans,
         valor: Number(valorTrans)
     }
