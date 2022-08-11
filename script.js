@@ -9,17 +9,26 @@ const transValorInput = document.querySelector('#amount')
 
 
 //Array com as despesas e receitas 
-let transFicticias = [
-    { id: 1, nome: 'Bolo de brigadeiro', valor: -20 },
-    { id: 2, nome: 'Salário', valor: 300 },
-    { id: 3, nome: 'Torta de frango', valor: -10 },
-    { id: 4, nome: 'Violão', valor: 150 }
-]
+// let trans = [
+//     { id: 1, nome: 'Bolo de brigadeiro', valor: -20 },
+//     { id: 2, nome: 'Salário', valor: 300 },
+//     { id: 3, nome: 'Torta de frango', valor: -10 },
+//     { id: 4, nome: 'Violão', valor: 150 }
+// ]
+
+
+//manipulando o localStorage
+const transLocalStorage = JSON.parse(localStorage.getItem('trans'))
+
+let trans = localStorage.getItem('trans') !== null ? transLocalStorage : []
+console.log(trans)
 
 
 //Função para remover as transações pelo ID
 const removerTrans = (ID) => {
-    transFicticias = transFicticias.filter(trans => trans.id !== ID)
+    trans = trans.filter(trans => trans.id !== ID)
+    atualizarLocalStorage()
+
     init()
 }
 
@@ -45,7 +54,7 @@ const addTransDentroDOM = (trans) => {
 
 //atualizando os dados da balança
 const atualizarBalanca = () => {
-    const transValores = transFicticias
+    const transValores = trans
         .map(trans => trans.valor);
 
     const total = transValores
@@ -73,11 +82,15 @@ const atualizarBalanca = () => {
 //função para iniciar o projeto, passando o for para cada elemento.
 const init = () => {
     transUl.innerHTML = ''
-    transFicticias.forEach(addTransDentroDOM)
+    trans.forEach(addTransDentroDOM)
     atualizarBalanca();
 }
 
 init();
+
+const atualizarLocalStorage = () => {
+    localStorage.setItem('trans', JSON.stringify(trans))
+}
 
 const ID = Math.round(Math.random() * 100)
 
@@ -94,15 +107,16 @@ formulario.addEventListener('submit', event => {
         return
     }
 
-    const trans = {
+    const transacao = {
         id: ID,
         nome: nomeTrans,
         valor: Number(valorTrans)
     }
 
-    transFicticias.push(trans)
+    trans.push(transacao)
 
     init()
+    atualizarLocalStorage()
 
     transNomeInput.value = ''
     transValorInput.value = ''
