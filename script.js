@@ -1,10 +1,11 @@
+// Constantes com as variáveis das referencias HTML.
 const transUl = document.querySelector('#transactions')
 const exibirReceitas = document.querySelector('#money-plus')
 const exibirDespesas = document.querySelector('#money-minus')
 const exibirBalanca = document.querySelector('#balance')
 const formulario = document.querySelector('#form')
 const transNomeInput = document.querySelector('#text')
-const transValorInput = documet.querySelector('#amount')
+const transValorInput = document.querySelector('#amount')
 
 
 //Array com as despesas e receitas 
@@ -56,10 +57,41 @@ const atualizarBalanca = () => {
 }
 
 
-//função para iniciar o projeto
+//função para iniciar o projeto, passando o for para cada elemento.
 const init = () => {
+    transUl.innerHTML = ''
     transFicticias.forEach(addTransDentroDOM)
     atualizarBalanca();
 }
 
 init();
+
+const ID = Math.round(Math.random() * 100)
+
+
+//Checando se os campos do formulário foram preenchidos
+formulario.addEventListener('submit', event => {
+    event.preventDefault()
+
+    const nomeTrans = transNomeInput.value.trim()
+    const valorTrans = transValorInput.value.trim()
+
+    if (nomeTrans === '' || valorTrans === '') {
+        alert('Ambos os campos devem estar preenchidos!')
+        return
+    }
+
+    const trans = {
+        id: ID,
+        nome: nomeTrans,
+        valor: Number(valorTrans)
+    }
+
+    transFicticias.push(trans)
+
+    init()
+
+    transNomeInput.value = ''
+    transValorInput.value = ''
+
+})
