@@ -8,7 +8,7 @@ const transNomeInput = document.querySelector('#text')
 const transValorInput = document.querySelector('#amount')
 
 
-//Array com as despesas e receitas 
+//Array com as despesas e receitas fictícias
 // let trans = [
 //     { id: 1, nome: 'Bolo de brigadeiro', valor: -20 },
 //     { id: 2, nome: 'Salário', valor: 300 },
@@ -17,7 +17,7 @@ const transValorInput = document.querySelector('#amount')
 // ]
 
 
-//manipulando o localStorage
+//manipulando dados no localStorage
 const transLocalStorage = JSON.parse(localStorage.getItem('transaction'))
 
 let trans = localStorage.getItem('transaction') !== null ? transLocalStorage : []
@@ -28,15 +28,13 @@ let trans = localStorage.getItem('transaction') !== null ? transLocalStorage : [
 const removerTrans = (ID) => {
 
     trans = trans.filter(trans => trans.id !== ID)
-    console.log(trans)
-
     atualizarLocalStorage()
     init()
 }
 
 //adicionando uma li dentro do documento com as referencias
 const addTransDentroDOM = (trans) => {
-    const operador = trans.valor < 0 ? '-' : '+';
+
     const CSSclass = trans.valor < 0 ? 'minus' : 'plus';
     const li = document.createElement('li');
 
@@ -51,7 +49,6 @@ const addTransDentroDOM = (trans) => {
         </button>
     `
     transUl.append(li)
-    console.log(trans.id)
 }
 
 
@@ -85,7 +82,6 @@ const atualizarBalanca = () => {
 //função para iniciar o projeto, passando o for para cada elemento.
 const init = () => {
     transUl.innerHTML = ''
-    console.log(trans.id)
     trans.forEach(addTransDentroDOM)
     atualizarBalanca();
 }
@@ -96,34 +92,46 @@ const atualizarLocalStorage = () => {
     localStorage.setItem('transaction', JSON.stringify(trans))
 }
 
-const gerarID = () => Math.round(Math.random() * 100)
 
 
 
 //Checando se os campos do formulário foram preenchidos
-formulario.addEventListener('submit', event => {
-    event.preventDefault()
 
+const gerarID = () => Math.round(Math.random() * 100)
+
+//Função para adicionar os elementos digitados nos campos de referencia oa array que será exibido
+const addTransdentroArray = (nomeTrans, valorTrans) => {
+    trans.push({
+        id: gerarID(),
+        nome: nomeTrans,
+        valor: Number(valorTrans)
+    })
+}
+
+//Função para definir as váriaveis dos campos vazios.
+const transVazio = () => {
+    transNomeInput.value = ''
+    transValorInput.value = ''
+}
+
+
+//função executada antes de enviar o submit.
+const form = (event) => {
+    event.preventDefault()
     const nomeTrans = transNomeInput.value.trim()
     const valorTrans = transValorInput.value.trim()
+    const refCampoVazio = nomeTrans === '' || valorTrans === ''
 
-    if (nomeTrans === '' || valorTrans === '') {
+    if (refCampoVazio) {
         alert('Ambos os campos devem estar preenchidos!')
         return
     }
 
-    const transacao = {
-        id: gerarID(),
-        nome: nomeTrans,
-        valor: Number(valorTrans)
-    }
-
-    trans.push(transacao)
-
+    addTransdentroArray(nomeTrans, valorTrans)
     init()
     atualizarLocalStorage()
+    transVazio()
+}
 
-    transNomeInput.value = ''
-    transValorInput.value = ''
 
-})
+formulario.addEventListener('submit', form)
