@@ -3,9 +3,9 @@ const transUl = document.querySelector('#transactions')
 const exibirReceitas = document.querySelector('#money-plus')
 const exibirDespesas = document.querySelector('#money-minus')
 const exibirBalanca = document.querySelector('#balance')
-const formulario = document.querySelector('#form')
-const transNomeInput = document.querySelector('#text')
-const transValorInput = document.querySelector('#amount')
+const transactionForm = document.querySelector('#form')
+const transNameInput = document.querySelector('#text')
+const transValueInput = document.querySelector('#amount')
 
 
 //Array com as despesas e receitas fictícias
@@ -16,24 +16,54 @@ const transValorInput = document.querySelector('#amount')
 //     { id: 4, nome: 'Violão', valor: 150 }
 // ]
 
-
-//manipulando dados no localStorage
 const transLocalStorage = JSON.parse(localStorage.getItem('transaction'))
 
 let trans = localStorage.getItem('transaction') !== null ? transLocalStorage : []
 
+const form = event => {
+    event.preventDefault()
+    const nomeTrans = transNameInput.value.trim()
+    const valorTrans = transValueInput.value.trim()
+    const refCampoVazio = nomeTrans === '' || valorTrans === ''
 
+    if (refCampoVazio) {
+        alert('Ambos os campos devem estar preenchidos!')
+        return
+    }
+    addTransIntoArray(nomeTrans, valorTrans)
+    init()
+    atualizarLocalStorage()
+    transVazio()
+}
 
-//Função para remover as transações pelo ID
-const removerTrans = (ID) => {
+const addTransIntoArray = (nomeTrans, valorTrans) => {
+    trans.push({
+        id: gerarID(),
+        nome: nomeTrans,
+        valor: Number(valorTrans)
+    })
+}
+
+const init = () => {
+    transUl.innerHTML = ''
+    trans.forEach(addTransIntoDOM)
+    updateScale();
+}
+
+const atualizarLocalStorage = () => {
+    localStorage.setItem('transaction', JSON.stringify(trans))
+    
+}
+
+const removerTrans = ID => {
 
     trans = trans.filter(trans => trans.id !== ID)
     atualizarLocalStorage()
     init()
 }
 
-//adicionando uma li dentro do documento com as referencias
-const addTransDentroDOM = (trans) => {
+
+const addTransIntoDOM = trans => {
 
     const CSSclass = trans.valor < 0 ? 'minus' : 'plus';
     const li = document.createElement('li');
@@ -51,9 +81,7 @@ const addTransDentroDOM = (trans) => {
     transUl.append(li)
 }
 
-
-//atualizando os dados da balança
-const atualizarBalanca = () => {
+const updateScale = () => {
     const transValores = trans
         .map(trans => trans.valor);
 
@@ -78,60 +106,12 @@ const atualizarBalanca = () => {
 
 }
 
-
-//função para iniciar o projeto, passando o for para cada elemento.
-const init = () => {
-    transUl.innerHTML = ''
-    trans.forEach(addTransDentroDOM)
-    atualizarBalanca();
-}
-
-init();
-
-const atualizarLocalStorage = () => {
-    localStorage.setItem('transaction', JSON.stringify(trans))
-}
-
-
-
-
-//Checando se os campos do formulário foram preenchidos
-
 const gerarID = () => Math.round(Math.random() * 100)
 
-//Função para adicionar os elementos digitados nos campos de referencia oa array que será exibido
-const addTransdentroArray = (nomeTrans, valorTrans) => {
-    trans.push({
-        id: gerarID(),
-        nome: nomeTrans,
-        valor: Number(valorTrans)
-    })
-}
-
-//Função para definir as váriaveis dos campos vazios.
 const transVazio = () => {
-    transNomeInput.value = ''
-    transValorInput.value = ''
+    transNameInput.value = ''
+    transValueInput.value = ''
 }
 
-
-//função executada antes de enviar o submit.
-const form = (event) => {
-    event.preventDefault()
-    const nomeTrans = transNomeInput.value.trim()
-    const valorTrans = transValorInput.value.trim()
-    const refCampoVazio = nomeTrans === '' || valorTrans === ''
-
-    if (refCampoVazio) {
-        alert('Ambos os campos devem estar preenchidos!')
-        return
-    }
-
-    addTransdentroArray(nomeTrans, valorTrans)
-    init()
-    atualizarLocalStorage()
-    transVazio()
-}
-
-
-formulario.addEventListener('submit', form)
+transactionForm.addEventListener('submit', form)
+init()
