@@ -8,7 +8,7 @@
 }
 
 body {
-    background-color: #0c0ce94d;
+    background-image: linear-gradient(180deg, #ffc77b 0, #ffb872 16.67%, #ffa364 33.33%, #f28953 50%, #e46e44 66.67%, #db573e 83.33%, #d5453e 100%);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -148,4 +148,16 @@ input[type='number'] {
 
 .transactions li:hover .delete-btn {
     opacity: 1;
+}
+
+.modal{
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background-image: linear-gradient(to right, rgb(20, 147, 220), rgb(17, 54, 71));
+    border: 2px solid black;
+    width: 50vw;
+    height: 05vh;
+    margin-top: 0;
 }

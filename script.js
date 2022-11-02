@@ -1,4 +1,3 @@
-// Constantes com as variáveis das referencias HTML.
 const transUl = document.querySelector('#transactions')
 const exibirReceitas = document.querySelector('#money-plus')
 const exibirDespesas = document.querySelector('#money-minus')
@@ -6,15 +5,6 @@ const exibirBalanca = document.querySelector('#balance')
 const transactionForm = document.querySelector('#form')
 const transNameInput = document.querySelector('#text')
 const transValueInput = document.querySelector('#amount')
-
-
-//Array com as despesas e receitas fictícias
-// let trans = [
-//     { id: 1, nome: 'Bolo de brigadeiro', valor: -20 },
-//     { id: 2, nome: 'Salário', valor: 300 },
-//     { id: 3, nome: 'Torta de frango', valor: -10 },
-//     { id: 4, nome: 'Violão', valor: 150 }
-// ]
 
 const transLocalStorage = JSON.parse(localStorage.getItem('transaction'))
 
@@ -27,7 +17,7 @@ const form = event => {
     const refCampoVazio = nomeTrans === '' || valorTrans === ''
 
     if (refCampoVazio) {
-        alert('Ambos os campos devem estar preenchidos!')
+        alert()
         return
     }
     addTransIntoArray(nomeTrans, valorTrans)
@@ -111,6 +101,15 @@ const gerarID = () => Math.round(Math.random() * 100)
 const transVazio = () => {
     transNameInput.value = ''
     transValueInput.value = ''
+}
+
+const alert = ()=>{
+    const modal = document.querySelector('.modal')
+    modal.style.display = 'flex'
+    setTimeout(function(){
+        modal.style.display = 'none'
+    }, 3000)
+    
 }
 
 transactionForm.addEventListener('submit', form)
